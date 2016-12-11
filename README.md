@@ -33,6 +33,8 @@ Running Randy
 Running Randy is as easy as:
 
 ```
+$ git clone git@github.com:scalebeat/randy.git
+$ cd randy
 $ go run randy.go -port 8080
 
 2016/12/11 13:38:08 Randy initialized, running on port 8080
