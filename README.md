@@ -8,7 +8,7 @@ generates IDs algorithmically.
 Randy ensures...
 -------------------
 
-1. **High-Performance** - ables to generate thousands of random numbers per second.
+1. **High-Performance** - ables to generate thousands of random IDs per second.
 
 2. **High-Scalability** - allows to run multiple Randy instances on single host
    (using different ports), multiple hosts and multiple clusters.
@@ -24,7 +24,8 @@ Randy ensures...
 Requirements
 ------------
 
-* [Golang]:https://golang.org/doc/install
+* [**Golang**](https://golang.org/doc/install)
+* [**HAProxy**](http://www.haproxy.org/) - recommended to load-balance across multiple Randy instances
 
 Running Randy
 -------------
@@ -32,12 +33,14 @@ Running Randy
 Running Randy is as easy as:
 
 ```
+$ git clone git@github.com:scalebeat/randy.git
+$ cd randy
 $ go run randy.go -port 8080
 
 2016/12/11 13:38:08 Randy initialized, running on port 8080
 ```
 
-Now you can try it by:
+Now you can try it by running:
 
 ```
 $ curl -i http://localhost:8080/
@@ -48,6 +51,22 @@ Content-Length: 48
 Content-Type: text/plain; charset=utf-8
 
 my-hostname:0:1481459835552584982:7
+```
+
+Running performance test
+------------------------
+
+You can easily run performance test by using [Apache Benchmark](http://httpd.apache.org/docs/2.4/programs/ab.html).
+Sample test result from a very low-end setup (VPS with 1 vCore 2,4 GHz 2 GB RAM):
+
+```
+$ ab -n 5000 -c 800 http://localhost:8080/
+
+...
+Requests per second:    5422.84 [#/sec] (mean)
+Time per request:       147.524 [ms] (mean)
+Time per request:       0.184 [ms] (mean, across all concurrent requests)
+
 ```
 
 License
