@@ -8,7 +8,7 @@ generates IDs algorithmically.
 Randy ensures...
 -------------------
 
-1. **High-Performance** - ables to generate thousands of random numbers per second.
+1. **High-Performance** - ables to generate thousands of random IDs per second.
 
 2. **High-Scalability** - allows to run multiple Randy instances on single host
    (using different ports), multiple hosts and multiple clusters.
@@ -24,7 +24,8 @@ Randy ensures...
 Requirements
 ------------
 
-* [Golang]:https://golang.org/doc/install
+* [**Golang**](https://golang.org/doc/install)
+* [**HAProxy**](http://www.haproxy.org/) - recommended to load-balance across multiple Randy instances
 
 Running Randy
 -------------
@@ -37,7 +38,7 @@ $ go run randy.go -port 8080
 2016/12/11 13:38:08 Randy initialized, running on port 8080
 ```
 
-Now you can try it by:
+Now you can try it by running:
 
 ```
 $ curl -i http://localhost:8080/
