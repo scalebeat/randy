@@ -1,0 +1,24 @@
+# vim temporaries
+*.sw[p|o|n]
+
+# python bytecode
+*.py[c|o]
+
+# system files
+.zfs
+.DS_Store
+.*.swp
+*~
+
+# Ansible
+*.retry
+
+# Directories used by IDEs
+nbproject
+.idea
+.project
+.settings
+
+
+!counter/.gitkeep
+counter/
