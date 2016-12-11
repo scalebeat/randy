@@ -53,6 +53,22 @@ Content-Type: text/plain; charset=utf-8
 my-hostname:0:1481459835552584982:7
 ```
 
+Running performance test
+------------------------
+
+You can easily run performance test by using [Apache Benchmark](http://httpd.apache.org/docs/2.4/programs/ab.html).
+Sample test result from a very low-end setup (VPS with 1 vCore 2,4 GHz 2 GB RAM):
+
+```
+$ ab -n 5000 -c 800 http://localhost:8080/
+
+...
+Requests per second:    5422.84 [#/sec] (mean)
+Time per request:       147.524 [ms] (mean)
+Time per request:       0.184 [ms] (mean, across all concurrent requests)
+
+```
+
 License
 -------
 
