@@ -9,11 +9,15 @@ import (
     "os"
     "strconv"
     "time"
+    "hash"
+    "crypto/md5"
+    "crypto/sha256"
+    "crypto/sha512"
 )
 
 // Randy represents runtime structure.
 type Randy struct {
-    HashFunction   string
+    HashAlgo       string
     Hostname       string
     Port           string
     RunCounter     int
@@ -21,25 +25,40 @@ type Randy struct {
 }
 
 var randy *Randy
+var hashes = map[string]bool {
+    "md5": true,
+    "sha256": true,
+    "sha512": true,
+    "raw": true,
+}
 
 func main() {
     initRandy()
 
     log.Print(fmt.Sprintf("Randy initialized, running on port %s", randy.Port))
 
-    http.HandleFunc("/", countHandler)
+    http.HandleFunc("/", randyHandler)
 
     log.Fatal(http.ListenAndServe(":"+randy.Port, nil))
 }
 
-func countHandler(w http.ResponseWriter, r *http.Request) {
+func randyHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, randy.ToString())
 }
 
 // ToString returns current Randy structure as a final ID string.
 func (randy *Randy) ToString() string {
-    uid := fmt.Sprintf("%s:%d:%d:%d", randy.Hostname, randy.RunCounter, randy.Timestamp(), randy.Increment())
-    return uid
+    uid := fmt.Sprintf("%s:%s:%d:%d:%d", randy.Hostname, randy.Port, randy.RunCounter, randy.Timestamp(), randy.Increment())
+    
+    hash := randy.CreateHash()
+
+    // If hash type is "raw" - just return generated uid
+    if hash == nil {
+        return uid
+    }
+
+    hash.Write([]byte(uid))
+    return fmt.Sprintf("%x", hash.Sum(nil))
 }
 
 // Increment increments internal Randy counter.
@@ -53,11 +72,32 @@ func (randy *Randy) Timestamp() int64 {
     return time.Now().UnixNano()
 }
 
+// CreateHash creates object that will be used to hash ids
+func (randy *Randy) CreateHash() hash.Hash {
+    switch randy.HashAlgo {
+    case "raw":
+        return nil
+    case "md5":
+        return md5.New()
+    case "sha256":
+        return sha256.New()
+    case "sha512":
+        return sha512.New()
+    }
+    
+    return nil
+}
+
 func initRandy() {
-    port := flag.String("port", "8080", "port on which Randy will listen")
+    portFlag := flag.String("port", "8080", "port on which Randy will listen")
+    hashFlag := flag.String("hash", "raw", "function to hash ids")
     flag.Parse()
 
-    runCounter := loadRunCounter(*port)
+    if !hashes[*hashFlag] {
+        log.Panic(fmt.Sprintf("\"%s\" is not a valid hash function", *hashFlag))
+    }
+
+    runCounter := loadRunCounter(*portFlag)
     hostname, err := os.Hostname()
 
     if err != nil {
@@ -65,13 +105,15 @@ func initRandy() {
     }
 
     randy = &Randy{
+        HashAlgo:       *hashFlag,
         Hostname:       hostname,
-        Port:           *port,
+        Port:           *portFlag,
         RunCounter:     runCounter,
         CurrentCounter: 0,
     }
 }
 
+// Randy stores counters of process initialization in counter files.
 func loadRunCounter(port string) int {
     filename := "counter/" + port + ".cnt"
 

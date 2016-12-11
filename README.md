@@ -35,10 +35,13 @@ Running Randy is as easy as:
 ```
 $ git clone git@github.com:scalebeat/randy.git
 $ cd randy
-$ go run randy.go -port 8080
+$ go run randy.go -port 8080 -hash raw
 
 2016/12/11 13:38:08 Randy initialized, running on port 8080
 ```
+
+**Note:** You can choose hash algo of: raw, md5, sha256 or sha512 - it will be used 
+to hash the final id.
 
 Now you can try it by running:
 
