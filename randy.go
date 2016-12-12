@@ -48,11 +48,12 @@ func randyHandler(w http.ResponseWriter, r *http.Request) {
 
 // ToString returns current Randy structure as a final ID string.
 func (randy *Randy) ToString() string {
-    uid := fmt.Sprintf("%s:%s:%d:%d:%d", randy.Hostname, randy.Port, randy.RunCounter, randy.Timestamp(), randy.Increment())
+    uid := fmt.Sprintf("%d:%d:%d:%s:%s", randy.Timestamp(), randy.RunCounter, randy.Increment(), randy.Hostname, randy.Port)
     
     hash := randy.CreateHash()
 
-    // If hash type is "raw" - just return generated uid
+    // If hash type is "raw" - just return generated uid.
+    // You should never use "raw" in production as it will expose your hostnames!
     if hash == nil {
         return uid
     }

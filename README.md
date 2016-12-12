@@ -42,7 +42,8 @@ $ ./randy -port 8080 -hash raw
 ```
 
 **Note:** You can choose hash algo of: raw, md5, sha256 or sha512 - it will be used 
-to hash the final id.
+to hash the final id. Keep in mind that you should **never use "raw" in production**
+as it will expose your hostname and port on which Randy is running.
 
 Now you can try it by running:
 
