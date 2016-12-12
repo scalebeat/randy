@@ -35,7 +35,8 @@ Running Randy is as easy as:
 ```
 $ git clone git@github.com:scalebeat/randy.git
 $ cd randy
-$ go run randy.go -port 8080 -hash raw
+$ go build
+$ ./randy -port 8080 -hash raw
 
 2016/12/11 13:38:08 Randy initialized, running on port 8080
 ```
@@ -53,7 +54,7 @@ Date: Sun, 11 Dec 2016 12:37:15 GMT
 Content-Length: 48
 Content-Type: text/plain; charset=utf-8
 
-my-hostname:0:1481459835552584982:7
+my-hostname:8080:0:1481459835552584982:7
 ```
 
 Running performance test
