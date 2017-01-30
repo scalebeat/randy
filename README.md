@@ -79,5 +79,5 @@ Time per request:       0.184 [ms] (mean, across all concurrent requests)
 License
 -------
 
-Copyright (c) 2016, Antoni Orfin (Scalebeat).
+Copyright (c) 2016, Antoni Orfin - [Scalebeat](https://scalebeat.com).
 Licensed under the [BSD 3-Clause](LICENSE)
